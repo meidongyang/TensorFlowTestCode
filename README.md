@@ -1,5 +1,5 @@
 # TensorFlowTestCode
-#一些常见的API和Tips
+一些常见的API和Tips
 -------
 
 ##### 忽略掉一些TensorFlow的Warning
@@ -46,7 +46,7 @@ X: [[1, 1, 1],
 
 * ###### 对标量数据汇总和记录：
 
-    tf.summary.scalar(tags, values, collections=None, name=None)
+      tf.summary.scalar(tags, values, collections=None, name=None)
 tags - 标签
 values - 值
 
