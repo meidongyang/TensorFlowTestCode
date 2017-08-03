@@ -119,7 +119,8 @@ sample_rate 是对音频的采样率
 
 > 截断正态分布是截断分布（Truncated Distribution）的一种，是指限制变量 x 取值范围（scope）的一种分布.
 > 假设 x 原来服从正态分布，那么限制 x 的取值在(a, b)范围内之后，x 的概率密度函数为：
-\\[f(x; \mu, \sigma, a, b)=\frac{\frac{1}{\sigma }\phi(\frac{x-\mu}{\sigma})}{\phi(\frac{b-\mu}{\sigma})-\phi(\frac{a-\mu}{\sigma})}\\]
+  $$f(x; \mu, \sigma, a, b)=\frac{\frac{1}{\sigma }\phi(\frac{x-\mu}{\sigma})}{\phi(\frac{b-\mu}{\sigma})-\phi(\frac{a-\mu}{\sigma})}$$
+
 
 
 -------
