@@ -1,4 +1,4 @@
-# -*- coding:UTF-8 -*-
+# -*- coding:UTF-8 -*- 
 import os
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
