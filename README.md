@@ -98,6 +98,7 @@ sample_rate 是对音频的采样率
     变量 Variable 和占位符 placeholder() 只是对图中所需的数据的规定和声明，在初始化之前，它们是空的，没有任何数据.
 
 填充数据可以用 constant／random／ones 等这些更底层的组件.
+
 -------
 ##### tf.truncated_normal  截断正态分布
 
