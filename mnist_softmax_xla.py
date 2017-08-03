@@ -51,7 +51,7 @@ def main(_):
     for i in range(train_loops):
         batch_xs, batch_ys = mnist.train.next_batch(100)
 
-        # Create a timeline for the last loop and export to json to view with
+        # Create a timeline for the last loop and export to json to view
         # 用chrome浏览器，在网址栏中输入 chrome://tracing/
         # 然后导入运行出来的json文件即可
         # 可以忽略不看
