@@ -181,9 +181,13 @@ tf.nn.conv2d_transpose(value, filter, output_shape, strides, padding='SAME', dat
 > | 零填充数量 | P |
 
 > 输出数据体的尺寸为 W2 x H2 x D2, 其中：
+
 > W2 = (W1 - F + 2P)/S +1
+
 > H2 = (H1 - F + 2P)/S +1
+
 > D2=K （有多少个滤波器就有多少个特征图）
+
 > W2 和 H2 的计算方法相同.
 
 
@@ -192,6 +196,7 @@ tf.nn.conv2d_transpose(value, filter, output_shape, strides, padding='SAME', dat
 
 如果想让输入与输出张量的空间尺寸保持不变，那么 padding="SAME", strides=[1, 1, 1, 1]. 此时公式的零填充数量 P 是 TensorFLow自动计算的.
 P 的计算公式为：
+
     P=((W2 - 1)*S - W1 + F)/2
 
 当 padding="VALID" 时， P=0， 也就是不填充. 卷积后的输出张量的空间尺寸会减小 F - 1 圈.
@@ -242,7 +247,11 @@ tf.nn.pool(input, window_shape, pooling_type, padding, dilation_rate=None, strid
 > | 步长 | S |
 
 > 输出数据体的尺寸为 W2 x H2 x D2, 其中：
+
 > W2 = (W1 - F)/S +1
+
 > H2 = (H1 - F)/S +1
+
 > D2 = D1
+
 > 很少使用零填充，F太大对网络有破坏性.
