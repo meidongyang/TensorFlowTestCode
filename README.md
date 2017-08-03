@@ -98,3 +98,149 @@ sample_rate 是对音频的采样率
     变量 Variable 和占位符 placeholder() 只是对图中所需的数据的规定和声明，在初始化之前，它们是空的，没有任何数据.
 
 填充数据可以用 constant／random／ones 等这些更底层的组件.
+-------
+##### tf.truncated_normal  截断正态分布
+
+    tf.truncated_normal(shape, mean=0.0, stddev=1.0, dtype=dtypes.float32, seed=None, name=None)
+返回一个从截断正态分布（truncated normal distribution）抽取的随机数.
+产生的随机数服从给定的均值 mean 和标准差 stddev 的正态分布，那些到均值的距离超过2倍标准差的随机数将被丢弃，然后重新抽取，直到得到足够数量的随机数为止，x 的范围：[mean - 2 * stddev, mean + 2 * stddev].
+参数 Args：
+
+* shape: A 1-D integer Tensor or Python array. 指定输出张量的shape.
+* mean: A 0-D Tensor or Python value of type 'dtype'. 截断正态分布的均值.
+* stddev: A 0-D Tensor or Python value of type 'dtype'. 截断正态分布的标准差.
+* dtype: 输出随机数的数据类型.
+* seed: 随机数种子.
+* name: 为这个Op起个名字（可选）.
+
+> 返回值 Returns：
+> 填充着从指定的截断正态分布中抽取的随机数的张量. A Tensor of the specified shape filled with random truncated normal values.
+
+> 截断正态分布是截断分布（Truncated Distribution）的一种，是指限制变量 x 取值范围（scope）的一种分布.
+> 假设 x 原来服从正态分布，那么限制 x 的取值在(a, b)范围内之后，x 的概率密度函数为：
+\\[f(x; \mu, \sigma, a, b)=\frac{\frac{1}{\sigma }\phi(\frac{x-\mu}{\sigma})}{\phi(\frac{b-\mu}{\sigma})-\phi(\frac{a-\mu}{\sigma})}\\]
+
+
+-------
+##### tf.identity
+
+    tf.identity(input, name=None)
+    
+Return a Tensor with the same shape and contents as the input Tensor or value.
+返回一个与 input 的 shape 和 value 一模一样的 Tensor.
+
+-------
+### 卷积API
+
+``` 
+tf.nn.conv1d(value, filters, stride, padding, use_cudnn_on_gpu=None, data_format=None, name=None)
+```   
+```
+tf.nn.conv2d(input, filter, strides, padding, use_cudnn_on_gpu=None, data_format=None, name=None)
+```   
+``` 
+tf.nn.conv3d(input,filter, strides, padding, name=None)
+```   
+``` 
+tf.nn.convolution(input, filter, padding, strides=None, dilation_rate=None, name=None, data_format=None)
+```    
+```     
+tf.nn.depthwise_conv2d(input, filter, strides, padding, name=None)
+``` 
+``` 
+tf.nn.separable_conv2d(input, depthwise_filter, pointerwise_filter, strides, padding, name=None)
+``` 
+``` 
+tf.nn.atrous_conv2d(value, filters, rate, padding, name=None)
+```  
+``` 
+tf.nn.conv2d_transpose(value, filter, output_shape, strides, padding='SAME', data_format=NHWC, name=None)
+```   
+
+* input: 指需要做卷积的输入张量（Tensor），shape=[batch, in_height, in_width, in_channels], 即[训练时数据集中的一个 batch 的图片数量，图片高度，图片宽度，颜色通道数]，是一个4维 Tensor ，要求数据类型为 float32 或 float64.
+* filter: Tensor, shape=[filter_height, filter_width, in_channels, out_channels], 即[滤波器（卷积核）的高度，滤波器的宽度，颜色通道数，滤波器的个数]. 要求数据类型与 input 相同. 其中，第三维 in_channels 就是 input 的第四维.
+* strides: 步长，一维向量，长度4. 卷积 2D 图像时 strides[0] = strides[3] = 1, 需要调整的是 strides[1] 和 strides[2].
+* padding: string，只能是' SAME '或' VALID '其中之一，这个值决定了不同的卷积方式.
+* use_cudnn_on_gpu: bool, 是否使用cudnn加速，默认为 True.
+ 
+返回值是一个Tensor，就是我们常说的 feature map（特征图）. feature map 也可以作为 conv2d 的 input.
+
+> 输入张量的 shape，卷积滤波器核的 shape，输出张量的 shape 该如何计算？
+
+> 输入数据体的尺寸 W1 x H1 x D1
+
+> 4个超参数：
+
+> | 名称 | 标记 |
+> | --- | --- | --- |
+> | 滤波器的数量 | K |
+> | 滤波器的空间尺寸 | F |
+> | 步长 | S |
+> | 零填充数量 | P |
+
+> 输出数据体的尺寸为 W2 x H2 x D2, 其中：
+> \\[W2=\frac{W1 - F + 2P}{S} + 1\\]
+> \\[H2=\frac{H1 - F + 2P}{S} + 1\\]
+> \\[D2=K （有多少个滤波器就有多少个特征图）\\]
+> W2 和 H2 的计算方法相同.
+
+
+上述公式中的超参数 K 和 F 确定了权重 weight（也就是 filter）的 shape=[K, K, D, F].
+超参数 K 确定了偏置 biases 的 shape=[K].
+
+如果想让输入与输出张量的空间尺寸保持不变，那么 padding="SAME", strides=[1, 1, 1, 1]. 此时公式的零填充数量 P 是 TensorFLow自动计算的.
+P 的计算公式为：
+    \\[P=\frac{(W2 - 1)*S - W1 + F}{2}\\]
+
+当 padding="VALID" 时， P=0， 也就是不填充. 卷积后的输出张量的空间尺寸会减小 F - 1 圈.
+
+当输入空间尺寸为偶数，滤波器核的数量为奇数时，不要把 S 设为 2， 因为不能整除，所以 S = 1.
+如果想大幅缩减尺寸，后接 pool 层即可.
+
+-------
+### Pooling API
+
+    
+```
+tf.nn.avg_pool(value, ksize, strides, padding, data_format=NHWC, name=None)
+```
+```
+tf.nn.max_pool(value, ksize, strides, padding, data_format=NHWC, name=None)
+```
+```
+tf.nn.max_pool_with_argmax(value, ksize, strides, padding, Targmax=None, name=None)
+```
+```
+tf.nn.max_pool3d(value, ksize, strides, padding, name=None)
+```
+```
+tf.nn.fractional_avg_pool(value, pooling_ratio, pseudo_random=None, overlapping=None, deterministic=None, seed=None, seed2=None, name=None)
+```
+```
+tf.nn.fractional_max_pool(value, pooling_ratio, pseudo_random=None, overlapping=None, deterministic=None, seed=None, seed2=None, name=None)
+```
+```
+tf.nn.pool(input, window_shape, pooling_type, padding, dilation_rate=None, strides=None, name=None, data_format=None)
+```
+* value: 需要池化操作的输入，一般池化层接在卷积层后面，所以输入通常是feature map.
+* ksie: 池化窗口大小，4维向量，一般是[1, height, width, 1].
+* strides: 和卷积的 strides 类似，一般是[1, stride, stride, 1].
+* padding: ' VALID '或' SAME ', 大多数时候为' VALID '.
+* data_format: 张量数据格式，可以是' NHWC '或' NCHW ', 一般用默认值. 必须和 conv2d 的格式一致.
+
+> Pooling layer 公式：
+> 
+> 输入数据体的尺寸 W1 x H1 x D1
+
+> 2个超参数：
+
+> | 名称 | 标记 |
+> | --- | --- | --- |
+> | 空间尺寸 | F |
+> | 步长 | S |
+
+> 输出数据体的尺寸为 W2 x H2 x D2, 其中：
+> \\[W2=\frac{W1 - F}{S} + 1\\]
+> \\[H2=\frac{H1 - F}{S} + 1\\]
+> \\[D2=D1\\]
+> 很少使用零填充，F太大对网络有破坏性.
