@@ -1,5 +1,6 @@
 # TensorFlowTestCode
 一些常见的API和Tips
+
 -------
 
 ##### 忽略掉一些TensorFlow的Warning
@@ -118,8 +119,7 @@ sample_rate 是对音频的采样率
 > 填充着从指定的截断正态分布中抽取的随机数的张量. A Tensor of the specified shape filled with random truncated normal values.
 
 > 截断正态分布是截断分布（Truncated Distribution）的一种，是指限制变量 x 取值范围（scope）的一种分布.
-> 假设 x 原来服从正态分布，那么限制 x 的取值在(a, b)范围内之后，x 的概率密度函数为：
-  $$f(x; \mu, \sigma, a, b)=\frac{\frac{1}{\sigma }\phi(\frac{x-\mu}{\sigma})}{\phi(\frac{b-\mu}{\sigma})-\phi(\frac{a-\mu}{\sigma})}$$
+
 
 
 
@@ -181,9 +181,9 @@ tf.nn.conv2d_transpose(value, filter, output_shape, strides, padding='SAME', dat
 > | 零填充数量 | P |
 
 > 输出数据体的尺寸为 W2 x H2 x D2, 其中：
-> \\[W2=\frac{W1 - F + 2P}{S} + 1\\]
-> \\[H2=\frac{H1 - F + 2P}{S} + 1\\]
-> \\[D2=K （有多少个滤波器就有多少个特征图）\\]
+> W2 = (W1 - F + 2P)/S +1
+> H2 = (H1 - F + 2P)/S +1
+> D2=K （有多少个滤波器就有多少个特征图）
 > W2 和 H2 的计算方法相同.
 
 
@@ -192,7 +192,7 @@ tf.nn.conv2d_transpose(value, filter, output_shape, strides, padding='SAME', dat
 
 如果想让输入与输出张量的空间尺寸保持不变，那么 padding="SAME", strides=[1, 1, 1, 1]. 此时公式的零填充数量 P 是 TensorFLow自动计算的.
 P 的计算公式为：
-    \\[P=\frac{(W2 - 1)*S - W1 + F}{2}\\]
+    P=((W2 - 1)*S - W1 + F)/2
 
 当 padding="VALID" 时， P=0， 也就是不填充. 卷积后的输出张量的空间尺寸会减小 F - 1 圈.
 
@@ -242,7 +242,7 @@ tf.nn.pool(input, window_shape, pooling_type, padding, dilation_rate=None, strid
 > | 步长 | S |
 
 > 输出数据体的尺寸为 W2 x H2 x D2, 其中：
-> \\[W2=\frac{W1 - F}{S} + 1\\]
-> \\[H2=\frac{H1 - F}{S} + 1\\]
-> \\[D2=D1\\]
+> W2 = (W1 - F)/S +1
+> H2 = (H1 - F)/S +1
+> D2 = D1
 > 很少使用零填充，F太大对网络有破坏性.
