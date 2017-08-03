@@ -174,7 +174,7 @@ tf.nn.conv2d_transpose(value, filter, output_shape, strides, padding='SAME', dat
 > 4个超参数：
 
 > | 名称 | 标记 |
-> | --- | --- | --- |
+> | --- | --- |
 > | 滤波器的数量 | K |
 > | 滤波器的空间尺寸 | F |
 > | 步长 | S |
@@ -237,7 +237,7 @@ tf.nn.pool(input, window_shape, pooling_type, padding, dilation_rate=None, strid
 > 2个超参数：
 
 > | 名称 | 标记 |
-> | --- | --- | --- |
+> | --- | --- |
 > | 空间尺寸 | F |
 > | 步长 | S |
 
