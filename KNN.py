@@ -51,3 +51,4 @@ with tf.Session() as sess:
     print "Done!"
     accuracy /= Ntest
     print "Accuracy:", accuracy
+ 
