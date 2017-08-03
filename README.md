@@ -99,6 +99,7 @@ sample_rate 是对音频的采样率
 
 填充数据可以用 constant／random／ones 等这些更底层的组件.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 -------
 ##### tf.truncated_normal  截断正态分布
@@ -258,4 +259,4 @@ tf.nn.pool(input, window_shape, pooling_type, padding, dilation_rate=None, strid
 
 
 =======
->>>>>>> 012b080b9b89fab2e18509160db3917c0bccb0b9
+
